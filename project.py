@@ -1,101 +1,88 @@
 import tkinter as tk
-from tkinter import messagebox
 
-class Materia:
-    def __init__(self, nome, horario_inicio, horario_fim):
-        self.nome = nome
-        self.horario_inicio = horario_inicio
-        self.horario_fim = horario_fim
-
-class App:
-    def __init__(self, root):
-        self.materias = []
-        self.root = root
-        self.root.title("Seletor de Matérias")
-        # Labels e campos de entrada
-        self.label_nome = tk.Label(root, text="Nome da Matéria:")
-        self.label_nome.pack()
-        self.entry_nome = tk.Entry(root)
-        self.entry_nome.pack()
+class Application(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Agendamento de Salas de Reunião")
+        
+        self.reunioes = []
+        self.salas = []
+        
+        self.create_widgets()
     
-        self.label_inicio = tk.Label(root, text="Horário de Início:")
-        self.label_inicio.pack()
-        self.entry_inicio = tk.Entry(root)
-        self.entry_inicio.pack()
+    def create_widgets(self):
+        # Frame para adicionar uma nova reunião
+        frame_reuniao = tk.Frame(self)
+        frame_reuniao.pack(padx=10, pady=10)
         
-        self.label_fim = tk.Label(root, text="Horário de Fim:")
-        self.label_fim.pack()
-        self.entry_fim = tk.Entry(root)
-        self.entry_fim.pack()
+        tk.Label(frame_reuniao, text="Horário de Início:").grid(row=0, column=0)
+        self.entry_inicio = tk.Entry(frame_reuniao)
+        self.entry_inicio.grid(row=0, column=1)
         
-        # Botão "Adicionar"
-        self.button_adicionar = tk.Button(root, text="Adicionar", command=self.adicionar_materia)
-        self.button_adicionar.pack()
+        tk.Label(frame_reuniao, text="Horário de Término:").grid(row=1, column=0)
+        self.entry_termino = tk.Entry(frame_reuniao)
+        self.entry_termino.grid(row=1, column=1)
         
-        # Lista de matérias adicionadas
-        self.lista_materias = tk.Listbox(root)
-        self.lista_materias.pack()
+        tk.Button(frame_reuniao, text="Agendar", command=self.agendar_reuniao).grid(row=2, column=0, columnspan=2)
         
-        # Botão "Montar Grade"
-        self.button_grade = tk.Button(root, text="Montar Grade", command=self.montar_grade)
-        self.button_grade.pack()
-    
-    def adicionar_materia(self):
-        nome = self.entry_nome.get()
+        # Frame para exibir as salas e reuniões agendadas
+        frame_salas_reunioes = tk.Frame(self)
+        frame_salas_reunioes.pack(padx=10, pady=10)
+        
+        self.text_salas = tk.Text(frame_salas_reunioes, width=30, height=10)
+        self.text_salas.pack(side=tk.LEFT)
+        
+        self.text_reunioes = tk.Text(frame_salas_reunioes, width=30, height=10)
+        self.text_reunioes.pack(side=tk.LEFT)
+        
+    def agendar_reuniao(self):
         inicio = self.entry_inicio.get()
-        fim = self.entry_fim.get()
+        termino = self.entry_termino.get()
         
-        if nome and inicio and fim:
-            materia = Materia(nome, inicio, fim)
-            self.materias.append(materia)
-            
-            self.lista_materias.insert(tk.END, f"{materia.nome} - Início: {materia.horario_inicio} / Fim: {materia.horario_fim}")
-            
-            self.entry_nome.delete(0, tk.END)
+        if inicio and termino:
+            reuniao = (inicio, termino)
+            self.reunioes.append(reuniao)
             self.entry_inicio.delete(0, tk.END)
-            self.entry_fim.delete(0, tk.END)
-        else:
-            messagebox.showerror("Erro", "Por favor, preencha todos os campos.")
-    
-    def montar_grade(self):
-     if len(self.materias) > 0:
-        # Ordena as matérias pelo horário de fim
-        self.materias.sort(key=lambda x: x.horario_fim)
-        
-        grades = [[]]  # Lista de grades
-        grades[0].append(self.materias[0])  # Adiciona a primeira matéria à primeira grade
-        
-        # Percorre as matérias restantes
-        for i in range(1, len(self.materias)):
-            inserido = False
+            self.entry_termino.delete(0, tk.END)
             
-            # Verifica em qual grade é possível inserir a matéria
-            for j in range(len(grades)):
-                if self.materias[i].horario_inicio >= grades[j][-1].horario_fim:
-                    grades[j].append(self.materias[i])
-                    inserido = True
+            self.atualizar_salas_reunioes()
+        
+    def atualizar_salas_reunioes(self):
+        # Limpa os textos das salas e reuniões
+        self.text_salas.delete(1.0, tk.END)
+        self.text_reunioes.delete(1.0, tk.END)
+        
+        # Realiza o agendamento das reuniões
+        self.salas, _ = self.interval_partitioning(self.reunioes)
+        
+        # Atualiza o texto das salas
+        for i, sala in enumerate(self.salas):
+            self.text_salas.insert(tk.END, f"Sala {i+1}:\n")
+            for reuniao in sala:
+                self.text_salas.insert(tk.END, f"Início: {reuniao[0]} - Término: {reuniao[1]}\n")
+            self.text_salas.insert(tk.END, "\n")
+        
+        # Atualiza o texto das reuniões
+        for reuniao in self.reunioes:
+            self.text_reunioes.insert(tk.END, f"Início: {reuniao[0]} - Término: {reuniao[1]}\n")
+    
+    def interval_partitioning(self, reunioes):
+        reunioes_ordenadas = sorted(reunioes, key=lambda x: x[0])
+        salas = []
+        
+        for reuniao in reunioes_ordenadas:
+            alocado = False
+            for sala in salas:
+                if reuniao[0] >= sala[-1][1]:
+                    sala.append(reuniao)
+                    alocado = True
                     break
             
-            # Se não for possível inserir em nenhuma grade existente, cria uma nova grade
-            if not inserido:
-                grades.append([self.materias[i]])
+            if not alocado:
+                salas.append([reuniao])
         
-        # Exibe as grades resultantes
-        messagebox.showinfo("Montar Grade", "Grade montada com sucesso!\n\nGrades Resultantes:\n" + self.formatar_grades(grades))
-     else:
-        messagebox.showerror("Erro", "Adicione pelo menos uma matéria antes de montar a grade.")
-
-def formatar_grades(self, grades):
-    resultado = ""
-    for i, grade in enumerate(grades):
-        resultado += f"Grade {i+1}:\n"
-        for materia in grade:
-            resultado += f"{materia.nome} - Início: {materia.horario_inicio} / Fim: {materia.horario_fim}\n"
-        resultado += "\n"
-    return resultado
-
-        
-
-root = tk.Tk()
-app = App(root)
-root.mainloop()
+        return salas, reunioes_ordenadas
+    
+if __name__ == "__main__":
+    app = Application()
+    app.mainloop()
