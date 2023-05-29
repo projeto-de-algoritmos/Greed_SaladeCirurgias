@@ -1,45 +1,36 @@
-**!! Atenção: Renomeie o seu repositório para (Tema)_(NomeDoProjeto). !!** 
+# Agendamento de Cirurgias
 
-Temas:
- - Grafos1
- - Grafos2
- - PD
- - D&C
- - Greed
- - Final 
- 
- **!! *Não coloque os nomes dos alunos no título do repositório*. Exemplo de título correto: Grafos2_Labirinto-do-Minotauro !!**
- 
- (Apague essa seção)
-
-# NomedoProjeto
-
-**Número da Lista**: X<br>
-**Conteúdo da Disciplina**: XXXXXXXXXX<br>
+**Número da Lista**: 3<br>
+**Conteúdo da Disciplina**: Algorítmos ambiciosos<br>
 
 ## Alunos
 |Matrícula | Aluno |
 | -- | -- |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| 190088257  |  Guilherme Keyti Cabral Kishimoto |
+| 190088745  |  Iago de Paula Cabral |
 
 ## Sobre 
-Descreva os objetivos do seu projeto e como ele funciona. 
+O projeto "Sala de Cirurgias" é um aplicativo desenvolvido em Python utilizando a biblioteca tkinter. Ele tem como objetivo permitir o agendamento de cirurgias em salas disponíveis, onde o usuário vai inserir informações sobre o paciente, data e horários da cirurgia. O aplicativo também então exibe em qual sala a cirurgia será realizada com base no data / horário da próxima cirurgia.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
-
+![](https://media.discordapp.net/attachments/869268773130092544/1112833873680805939/Captura_de_Tela_2023-05-29_as_16.59.12.png)
+<br>
+Figura 1: Interface do programa.<br><br>
+![](https://media.discordapp.net/attachments/869268773130092544/1112833872258928671/Captura_de_Tela_2023-05-29_as_17.04.02.png)
+<br>
+Figura 2: Inserindo dados.<br><br>
+![](https://media.discordapp.net/attachments/869268773130092544/1112833873454305360/Captura_de_Tela_2023-05-29_as_17.00.11.png)
+<br>
+Figura 3: Resultado.<br><br>
 ## Instalação 
-**Linguagem**: xxxxxx<br>
-**Framework**: (caso exista)<br>
-Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
+**Linguagem**: Python<br>
+Necessário instalar o [Python 3](https://www.python.org/downloads/).
 
-## Uso 
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+Para executar o programa: 
+> python3 project.py
 
-## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
-
-
-
-
+## Uso
+1) A janela do aplicativo será exibida. <br>
+2) Preencha os campos "Nome do paciente", "Data da Cirurgia", "Horário de Início" e "Horário de Término" com as informações correspondentes. <br>
+3) Clique no botão "Agendar" para agendar a cirurgia. <br>
+4) As informações atualizadas das salas de cirurgia e das cirurgias agendadas serão exibidas nas áreas de texto correspondentes. <br>
