@@ -22,6 +22,10 @@ Figura 2: Inserindo dados.<br><br>
 ![](https://media.discordapp.net/attachments/869268773130092544/1112833873454305360/Captura_de_Tela_2023-05-29_as_17.00.11.png)
 <br>
 Figura 3: Resultado.<br><br>
+
+## Gravação
+Link para ver no Youtube: [Vídeo](https://youtu.be/_v9psdHXAdU)
+
 ## Instalação 
 **Linguagem**: Python<br>
 Necessário instalar o [Python 3](https://www.python.org/downloads/).
